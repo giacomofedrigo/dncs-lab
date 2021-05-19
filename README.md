@@ -1,4 +1,4 @@
-# DNCS-LAB
+﻿# DNCS-LAB
 
 This repository contains the Vagrant files required to run the virtual lab environment used in the DNCS course.
 ```
@@ -6,36 +6,36 @@ This repository contains the Vagrant files required to run the virtual lab envir
 
         +-----------------------------------------------------+
         |                                                     |
-        |                                                     |eth0
+        |                                                     |enp0s3
         +--+--+                +------------+             +------------+
-        |     |                |            |             |            |
-        |     |            eth0|            |eth2     eth2|            |
+        |     |                |            |  10.0.0.6/30|            |
+        |     |          enp0s3|            |       enp0s9|            |
         |     +----------------+  router-1  +-------------+  router-2  |
-        |     |                |            |             |            |
-        |     |                |            |             |            |
+        |     |                |            |enp0s9       |            |
+        |     |                |            |10.0.0.5/30  |            |
         |  M  |                +------------+             +------------+
-        |  A  |                      |eth1                       |eth1
-        |  N  |                      |                           |
-        |  A  |                      |                           |
+        |  A  |      192.168.0.129/25|enp0s8                     |enp0s8
+        |  N  |        192.168.1.1/23|                    enp0s8 |192.168.3.1/24
+        |  A  |                      |            192.168.3.2/24 |
         |  G  |                      |                     +-----+----+
-        |  E  |                      |eth1                 |          |
+        |  E  |                      |enp0s8               |          |
         |  M  |            +-------------------+           |          |
-        |  E  |        eth0|                   |           |  host-c  |
+        |  E  |      enp0s3|                   |           |  host-c  |
         |  N  +------------+      SWITCH       |           |          |
         |  T  |            |                   |           |          |
         |     |            +-------------------+           +----------+
-        |  V  |               |eth2         |eth3                |eth0
+        |  V  |               |enp0s9       |enp0s10             |enp0s3
         |  A  |               |             |                    |
-        |  G  |               |             |                    |
-        |  R  |               |eth1         |eth1                |
+        |  G  | 192.168.0.130/25|             |192.168.1.2/23    |
+        |  R  |         enp0s8|             |enp0s8              |
         |  A  |        +----------+     +----------+             |
         |  N  |        |          |     |          |             |
-        |  T  |    eth0|          |     |          |             |
+        |  T  |  enp0s3|          |     |          |             |
         |     +--------+  host-a  |     |  host-b  |             |
         |     |        |          |     |          |             |
         |     |        |          |     |          |             |
         ++-+--+        +----------+     +----------+             |
-        | |                              |eth0                   |
+        | |                              |enp0s3                 |
         | |                              |                       |
         | +------------------------------+                       |
         |                                                        |
@@ -57,7 +57,7 @@ This repository contains the Vagrant files required to run the virtual lab envir
 # How-to
  - Install Virtualbox and Vagrant
  - Clone this repository
-`git clone https://github.com/fabrizio-granelli/dncs-lab`
+`git clone https://github.com/fabrizio-granelli/dncs-lab
  - You should be able to launch the lab from within the cloned repo folder.
 ```
 cd dncs-lab
@@ -87,11 +87,11 @@ The assignment consists in a simple piece of design work that students have to c
 The assignment deliverable consists of a Github repository containing:
 - the code necessary for the infrastructure to be replicated and instantiated
 - an updated README.md file where design decisions and experimental results are illustrated
-- an updated answers.yml file containing the details of your project
+- an updated answers.yml file containing the details of
 
 ## Design Requirements
-- Hosts 1-a and 1-b are in two subnets (*Hosts-A* and *Hosts-B*) that must be able to scale up to respectively {{ HostsASubnetRequiredAddresses }} and {{ HostsBSubnetRequiredAddresses }} usable addresses
-- Host 2-c is in a subnet (*Hub*) that needs to accommodate up to {{ HubSubnetRequiredAddresses }} usable addresses
+- Hosts 1-a and 1-b are in two subnets (*Hosts-A* and *Hosts-B*) that must be able to scale up to respectively 104 and 368 usable addresses
+- Host 2-c is in a subnet (*Hub*) that needs to accommodate up to 256 usable addresses
 - Host 2-c must run a docker image (dustnic82/nginx-test) which implements a web-server that must be reachable from Host-1-a and Host-1-b
 - No dynamic routing can be used
 - Routes must be as generic as possible
@@ -101,7 +101,7 @@ The assignment deliverable consists of a Github repository containing:
 - Fork the Github repository: https://github.com/fabrizio-granelli/dncs-lab
 - Clone the repository
 - Run the initiator script (dncs-init). The script generates a custom `answers.yml` file and updates the Readme.md file with specific details automatically generated by the script itself.
-  This can be done just once in case the work is being carried out by a group of (<=2) engineers, using the name of the 'squad lead'. 
+  This can be done just once in case the work is being carried out by a group of (<=2) engineers, using the name of the 'squad lead'.
 - Implement the design by integrating the necessary commands into the VM startup scripts (create more if necessary)
 - Modify the Vagrantfile (if necessary)
 - Document the design by expanding this readme file
@@ -117,4 +117,20 @@ The assignment deliverable consists of a Github repository containing:
 
 
 # Design
-[ Your work goes here ]
+
+## Address informations
+
+| Device       | Network       | Subnet          | Broadcast     | Hosts | Host-min      | Host-max      |
+|--------------|---------------|-----------------|---------------|-------|---------------|---------------|
+| Host-a       | 192.168.0.128 | 255.255.255.128 | 192.168.0.255 | 126   | 192.168.0.129 | 192.168.0.254 |
+| Host-b       | 192.168.1.0   | 255.255.254.0   | 192.168.2.255 | 510   | 192.168.1.1   | 192.168.2.254 |
+| Host-c       | 192.168.3.0   | 255.255.255.0   | 192.168.3.255 | 254   | 192.168.3.1   | 192.168.3.254 |
+| Inter-router | 10.0.0.4      | 255.255.255.252 | 10.0.0.7      | 2     | 10.0.0.5      | 10.0.0.6      |
+
+To assign IP adresses to the VMs I had to follow this requirements, that say:
+
+    "Hosts-A" must be able to scale up to 104 usable addresses
+    "Hosts-B" must be able to scale up to 368 usable addresses
+    "Hub" must be able to scale up to 236 usable addresses
+
+The Netmasks are sized to be as small as possible respecting the specifications.

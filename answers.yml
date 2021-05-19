@@ -1,0 +1,18 @@
+FirstName: {{ Giacomo }}
+LastName: {{ Fedrigo }}
+MatriculationNumber: {{ 204788 }}
+AcademicYear: 2020-2021
+GitHubUrl: https://github.com//dncs-lab.git
+Subnets:
+  HostsA:
+    RequiredAddresses: 104
+    SubnetAddress: 192.168.0.128
+    SubnetPrefixLength: 25
+  HostsB:
+    RequiredAddresses: 368
+    SubnetAddress: 192.168.1.0
+    SubnetPrefixLength: 23
+  Hub:
+    RequiredAddresses: 236
+    SubnetAddress: 192.168.3.0
+    SubnetPrefixLength: 24
