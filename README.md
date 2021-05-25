@@ -118,6 +118,9 @@ The assignment deliverable consists of a Github repository containing:
 
 # Design
 
+Authors and Notes
+This project has been developed by Giacomo Fedrigo (mat. 204788) and Luigi Dorigatti (mat. 204896)equal parts.
+
 ## Address informations
 
 | Device       | Network       | Subnet          | Broadcast     | Hosts | Host-min      | Host-max      |
@@ -134,3 +137,25 @@ To assign IP adresses to the VMs I had to follow this requirements, that say:
     "Hub" must be able to scale up to 236 usable addresses
 
 The Netmasks are sized to be as small as possible respecting the specifications.
+
+
+
+# Developing
+
+Host-a: it needs to accommodate up to 104 devices, as subnet IP addresses we used 192.168.0.128/25; in this host we turned on the eth1 interface with IP address 192.168.0.129/25. Host-b: it needs to accommodate up to 368 devices, as subnet IP addresses we used 192.168.1.0/23; we turned on the eth1 interface with IP address 192.168.1.1/23. Switch: we tried to figure out how to build a VLAN that would allow host-a and host-b to be kept in separate subnets. we were then able to install the openvswitch package, and activate eth1, eth2 and eth3.
+
+
+
+
+# Testing
+
+To test our network we made use of the following commands. The commands below gave us the confirmation that the network was working properly.
+
+Check if host-a can reach host-b	vagrant ssh host-a -c "ping  192.168.2.2 -c 1"
+Check if host-a can reach host-c	vagrant ssh host-a -c "ping 192.168.3.2 -c 1"
+Check if host-b can reach host-a	vagrant ssh host-b -c "ping 192.168.0.2 -c 1"
+Check if host-b can reach host-c	vagrant ssh host-b -c "ping 192.168.3.2 -c 1"
+Check if host-c can reach host-a	vagrant ssh host-c -c "ping 192.168.0.2 -c 1"
+Check if host-c can reach host-b	vagrant ssh host-c -c "ping 192.168.2.2 -c 1"
+
+
